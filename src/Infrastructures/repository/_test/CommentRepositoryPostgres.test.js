@@ -124,19 +124,21 @@ describe('CommentRepositoryPostgres', () => {
         threadId,
         content: 'Example Comment',
         owner: userPayload.id,
+        is_delete: false,
       };
       await CommentsTableTestHelper.addComment(commentPayload);
-
+  
       // Action
       const commentsResult = await commentRepositoryPostgres.getCommentsByThreadId(threadId);
-
+  
       // Assert
       expect(commentsResult).toBeDefined();
       expect(commentsResult).toHaveLength(1);
       expect(commentsResult[0].id).toEqual(commentPayload.id);
       expect(commentsResult[0].content).toEqual(commentPayload.content);
       expect(commentsResult[0].username).toEqual(userPayload.username);
-    });
+      expect(commentsResult[0].is_delete).toEqual(commentPayload.is_delete);
+    });  
 
     it('should get empty array when comments by threadId is empty', async () => {
       // Arrange

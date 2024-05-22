@@ -18,7 +18,7 @@ describe('/threads/{threadId}/comments endpoint', () => {
   });
 
   describe('when POST /threads/{threadId}/comments', () => {
-    it('should response 201 and persisted comment', async () => {
+    it('should respond 201 and persist the comment', async () => {
       // Arrange
       const userId = 'user-123';
       await UsersTableTestHelper.addUser({ id: userId });
@@ -51,7 +51,7 @@ describe('/threads/{threadId}/comments endpoint', () => {
       expect(responseJson.data.addedComment.owner).toEqual(owner);
     });
 
-    it('should response 400 when request payload not contain needed property', async () => {
+    it('should respond 400 when request payload does not contain needed property', async () => {
       // Arrange
       const userId = 'user-123';
       await UsersTableTestHelper.addUser({ id: userId });
@@ -80,7 +80,7 @@ describe('/threads/{threadId}/comments endpoint', () => {
       expect(responseJson.message).toEqual('tidak dapat membuat komentar karena properti yang dibutuhkan tidak lengkap');
     });
 
-    it('should response 400 when request payload not meet data type specification', async () => {
+    it('should respond 400 when request payload does not meet data type specification', async () => {
       // Arrange
       const userId = 'user-123';
       await UsersTableTestHelper.addUser({ id: userId });
@@ -111,7 +111,7 @@ describe('/threads/{threadId}/comments endpoint', () => {
       expect(responseJson.message).toEqual('tidak dapat membuat komentar karena tipe data tidak sesuai');
     });
 
-    it('should response 401 status code when add comment without authentication', async () => {
+    it('should respond 401 when adding comment without authentication', async () => {
       // Arrange
       const userId = 'user-123';
       await UsersTableTestHelper.addUser({ id: userId });
@@ -139,7 +139,7 @@ describe('/threads/{threadId}/comments endpoint', () => {
   });
 
   describe('when DELETE /threads/{threadId}/comments/{commentId}', () => {
-    it('should response 200 when comment is successfully deleted', async () => {
+    it('should respond 200 when comment is successfully deleted', async () => {
       // Arrange
       const userId = 'user-123';
       await UsersTableTestHelper.addUser({ id: userId });
@@ -167,7 +167,7 @@ describe('/threads/{threadId}/comments endpoint', () => {
       expect(responseJson.status).toEqual('success');
     });
 
-    it('should response 401 status code when delete comment without authentication', async () => {
+    it('should respond 401 when deleting comment without authentication', async () => {
       // Arrange
       const userId = 'user-123';
       await UsersTableTestHelper.addUser({ id: userId });
@@ -191,7 +191,7 @@ describe('/threads/{threadId}/comments endpoint', () => {
       expect(responseJson.message).toEqual('Missing authentication');
     });
 
-    it('should response 403 status code when user is not the owner of the comment', async () => {
+    it('should respond 403 when user is not the owner of the comment', async () => {
       // Arrange
       const userId = 'user-123';
       await UsersTableTestHelper.addUser({ id: userId });
@@ -201,11 +201,9 @@ describe('/threads/{threadId}/comments endpoint', () => {
       const otherCommentOwner = 'user-456';
       await UsersTableTestHelper.addUser({ id: otherCommentOwner, username: 'user456' });
       const commentId = 'comment-456';
-      await CommentsTableTestHelper.addComment(
-        {
-          id: commentId, threadId, owner: otherCommentOwner,
-        },
-      );
+      await CommentsTableTestHelper.addComment({
+        id: commentId, threadId, owner: otherCommentOwner,
+      });
 
       const server = await createServer(container);
       const { accessToken } = await ServerTestHelper.generateAccessToken(server);
@@ -225,7 +223,7 @@ describe('/threads/{threadId}/comments endpoint', () => {
       expect(responseJson.message).toEqual('komentar ini bukan milik anda');
     });
 
-    it('should response 404 status code when thread or comment is not present or is not valid', async () => {
+    it('should respond 404 when thread or comment is not present or invalid', async () => {
       // Arrange
       const invalidThreadId = 'thread-000';
       const invalidCommentId = 'comment-000';

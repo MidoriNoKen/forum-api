@@ -136,18 +136,20 @@ describe('ReplyRepositoryPostgres', () => {
         commentId,
         content: 'Example Reply',
         owner: userPayload.id,
+        is_delete: false,
       };
       await RepliesTableTestHelper.addReply(replyPayload);
-
+  
       // Action
       const repliesResult = await replyRepositoryPostgres.getRepliesByThreadId(threadId);
-
+  
       // Assert
       expect(repliesResult).toBeDefined();
       expect(repliesResult).toHaveLength(1);
       expect(repliesResult[0].id).toEqual(replyPayload.id);
       expect(repliesResult[0].content).toEqual(replyPayload.content);
       expect(repliesResult[0].username).toEqual(userPayload.username);
+      expect(repliesResult[0].is_delete).toEqual(replyPayload.is_delete);
     });
 
     it('should get empty array when replies by threadId is empty', async () => {
