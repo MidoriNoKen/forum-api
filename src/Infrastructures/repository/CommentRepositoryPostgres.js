@@ -21,7 +21,7 @@ class CommentRepositoryPostgres extends CommentRepository {
 
     const result = await this._pool.query(query);
 
-    return new AddedComment({ ...result.rows[0] });
+    return new AddedComment(result.rows[0]);
   }
 
   async verifyAvailableCommentById(commentId) {
@@ -70,11 +70,7 @@ class CommentRepositoryPostgres extends CommentRepository {
       values: [commentId],
     };
 
-    const result = await this._pool.query(query);
-
-    if (!result.rowCount) {
-      throw new NotFoundError('komentar tidak tersedia');
-    }
+    await this._pool.query(query);
   }
 }
 
